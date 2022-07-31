@@ -3,23 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Models\VinylRecord;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VinylRecord\CreateVinylRecordRequest;
 use App\Http\Requests\VinylRecord\UpdateVinylRecordRequest;
-use App\Http\Resources\VinylRecord\EditableResource;
+use App\Http\Resources\VinylRecord\EditableResource as VinylRecordEditableResource;
 
 class VinylRecordController extends Controller
 {
-  public function get(VinylRecord $vinyl_record): JsonResource
+  public function get(VinylRecord $vinyl_record): VinylRecordEditableResource
   {
-    return EditableResource::make($vinyl_record);
+    return VinylRecordEditableResource::make($vinyl_record);
   }
 
 
-  public function create(CreateVinylRecordRequest $request): JsonResource
+  public function create(CreateVinylRecordRequest $request): VinylRecordEditableResource
   {
     $input = $request->only(['title', 'description']);
 
@@ -31,11 +30,11 @@ class VinylRecordController extends Controller
     $vinyl_record->tags()->attach($tag_ids);
     $vinyl_record->authors()->attach($author_ids);
 
-    return EditableResource::make($vinyl_record);
+    return VinylRecordEditableResource::make($vinyl_record);
   }
 
 
-  public function update(UpdateVinylRecordRequest $request, VinylRecord $vinyl_record): JsonResource
+  public function update(UpdateVinylRecordRequest $request, VinylRecord $vinyl_record): VinylRecordEditableResource
   {
     $input = $request->only(['title', 'description']);
 
@@ -46,7 +45,7 @@ class VinylRecordController extends Controller
     $vinyl_record->tags()->sync($tag_ids);
     $vinyl_record->authors()->sync($author_ids);
 
-    return EditableResource::make($vinyl_record);
+    return VinylRecordEditableResource::make($vinyl_record);
   }
 
 
