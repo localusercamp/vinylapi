@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -15,5 +16,10 @@ use Laravel\Sanctum\PersonalAccessToken;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
+
+Route::prefix('admin-panel')->group(function () {
+  Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
+  Route::post('test', [ImageController::class, 'test']);
 });
+// });
