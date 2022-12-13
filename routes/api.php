@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,14 @@ use Laravel\Sanctum\PersonalAccessToken;
 // Route::middleware('auth:sanctum')->group(function () {
 
 Route::prefix('admin-panel')->group(function () {
-  Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
-  Route::post('test', [ImageController::class, 'test']);
+  // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
+  // Route::post('test', [ImageController::class, 'test']);
+});
+
+Route::prefix('admin')->group(function () {
+  Route::apiResource('author', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
+
+  // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
+  // Route::post('test', [ImageController::class, 'test']);
 });
 // });

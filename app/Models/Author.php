@@ -19,6 +19,11 @@ class Author extends Model
   use HasFactory, SoftDeletes;
 
 
+  protected $fillable = [
+    'name',
+  ];
+
+
   public function vinyl_records(): BelongsToMany
   {
     return $this->belongsToMany(VinylRecord::class)->using(AuthorVinylRecord::class);
