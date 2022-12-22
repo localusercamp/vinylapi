@@ -9,9 +9,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\VinylRecord\CreateVinylRecordRequest;
 use App\Http\Requests\VinylRecord\UpdateVinylRecordRequest;
 use App\Http\Resources\VinylRecord\EditableResource as VinylRecordEditableResource;
+use App\Models\Author;
 
 class VinylRecordController extends Controller
 {
+  public function init()
+  {
+    $author_list = Author::query()->get(['id', 'name']);
+
+    return compact('author_list');
+  }
+
+
   public function get(VinylRecord $vinyl_record): VinylRecordEditableResource
   {
     return VinylRecordEditableResource::make($vinyl_record);

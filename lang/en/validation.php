@@ -165,6 +165,7 @@ return [
   |
   */
 
-  'attributes' => [],
-
+  'attributes' => [
+    'name' => 'Имя'
+  ],
 ];
