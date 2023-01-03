@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Condition;
 use Illuminate\Http\JsonResponse;
 
 use App\Models\VinylRecord;
@@ -17,7 +18,9 @@ class VinylRecordController extends Controller
   {
     $author_list = Author::query()->get(['id', 'name']);
 
-    return compact('author_list');
+    $condition_list = Condition::all();
+
+    return compact('author_list', 'condition_list');
   }
 
 

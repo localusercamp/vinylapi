@@ -27,7 +27,7 @@ class VinylRecord extends Model implements Sellable
 
   protected $guarded = [
     'id',
-    'cover_id',
+    'poster_id',
   ];
 
   protected $hidden = [
@@ -44,6 +44,11 @@ class VinylRecord extends Model implements Sellable
   public function authors(): BelongsToMany
   {
     return $this->belongsToMany(Author::class)->using(AuthorVinylRecord::class);
+  }
+
+  public function poster(): HasOne
+  {
+    return $this->hasOne(Author::class, 'poster_id');
   }
 
 

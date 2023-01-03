@@ -17,7 +17,6 @@ return new class extends Migration
       $table->id();
       $table->string('title', 128);
       $table->longText('description')->nullable();
-      $table->bigInteger('cover_id')->nullable();
       $table->timestamps();
       $table->softDeletes();
     });
