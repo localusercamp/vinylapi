@@ -11,16 +11,19 @@ use App\Http\Requests\VinylRecord\CreateVinylRecordRequest;
 use App\Http\Requests\VinylRecord\UpdateVinylRecordRequest;
 use App\Http\Resources\VinylRecord\EditableResource as VinylRecordEditableResource;
 use App\Models\Author;
+use App\Models\Country;
+use App\Models\Genre;
 
 class VinylRecordController extends Controller
 {
   public function init()
   {
     $author_list = Author::query()->get(['id', 'name']);
-
     $condition_list = Condition::all();
+    $genre_list = Genre::all();
+    $country_list = Country::get(['id', 'name']);
 
-    return compact('author_list', 'condition_list');
+    return compact('author_list', 'condition_list', 'genre_list', 'country_list');
   }
 
 
