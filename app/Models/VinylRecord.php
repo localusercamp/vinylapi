@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
   BelongsToMany,
+  HasMany,
   HasOne,
 };
 
@@ -27,7 +28,6 @@ class VinylRecord extends Model implements Sellable
 
   protected $guarded = [
     'id',
-    'poster_id',
   ];
 
   protected $hidden = [
@@ -46,9 +46,14 @@ class VinylRecord extends Model implements Sellable
     return $this->belongsToMany(Author::class)->using(AuthorVinylRecord::class);
   }
 
-  public function poster(): HasOne
+  public function poster()
   {
-    return $this->hasOne(Author::class, 'poster_id');
+    return $this->belongsTo(Image::class);
+  }
+
+  public function gallery(): HasMany
+  {
+    return $this->hasMany(Image::class, 'vinyl_record_id');
   }
 
 

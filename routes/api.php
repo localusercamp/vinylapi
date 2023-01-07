@@ -29,8 +29,11 @@ Route::prefix('admin')->group(function () {
   Route::apiResource('author', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
   Route::put('author/{author}/restore', [AuthorController::class, 'restore'])->withTrashed();
 
-  Route::prefix('vinyl-record')->group(function () {
-    Route::get('init', [VinylRecordController::class, 'init']);
+  Route::prefix('vinyl-record')->controller(VinylRecordController::class)->group(function () {
+    Route::get('init',           'init');
+    Route::get('{vinyl_record}', 'get');
+    Route::post('',              'create');
+    Route::match(['put', 'post'], '{vinyl_record}', 'update');
   });
   // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
   // Route::post('test', [ImageController::class, 'test']);

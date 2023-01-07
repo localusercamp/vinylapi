@@ -174,6 +174,9 @@ return [
   |
   */
 
-  'attributes' => [],
-
+  'attributes' => [
+    'title' => 'наименование',
+    'price' => 'цена',
+    'authors' => 'исполнители',
+  ],
 ];
