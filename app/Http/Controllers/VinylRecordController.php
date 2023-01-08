@@ -79,7 +79,7 @@ class VinylRecordController extends Controller
     $input = $request->only(match ($step) {
       'main'     => ['title', 'description', 'price', 'author_ids'],
       'addition' => ['condition', 'sleeve_condition', 'release_year', 'country_id', 'genre_id', 'catalog_number'],
-      'media'    => ['poster', 'gallery', 'publish']
+      'media'    => ['poster', 'gallery', 'publish', 'delete_gallery']
     });
 
     $errors = (match ($step) {
@@ -99,6 +99,8 @@ class VinylRecordController extends Controller
     } else if ($step === 'media') {
       $uploadedPoster = $input['poster'] ?? null;
       $uploadedGallery = $input['gallery'] ?? [];
+      $deleteGalleryIds = $input['delete_gallery'] ?? [];
+      $galleryIds = $vinyl_record->gallery()->pluck('id');
 
       if (!$vinyl_record->poster && !$uploadedPoster) response()->json(new MessageBag([
         'poster' => 'Необходимо загрузить постер'
@@ -112,6 +114,11 @@ class VinylRecordController extends Controller
         $path = $uploadedPoster->storePublicly('public/vinyl-record/posters');
         $poster = Image::create(compact('path'));
         $vinyl_record->poster_id = $poster->id;
+      }
+
+      foreach ($deleteGalleryIds as $id) {
+        if (!$galleryIds->contains($id)) abort(404);
+        Image::find($id)->deleteWithSource();
       }
 
       foreach ($uploadedGallery as $uploadedImage) {
@@ -157,6 +164,7 @@ class VinylRecordController extends Controller
       'poster' => 'sometimes',
       'gallery' => 'sometimes|array',
       'publish' => 'required|bool',
+      'delete_gallery' => 'sometimes|array'
     ]);
   }
 }
