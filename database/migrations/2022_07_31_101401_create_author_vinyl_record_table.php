@@ -20,6 +20,7 @@ return new class extends Migration
 
       $table->foreignIdFor(Author::class);
       $table->foreignIdFor(VinylRecord::class);
+      $table->boolean('is_main')->default(false);
 
       $table->foreign('author_id')->references('id')->on('authors');
       $table->foreign('vinyl_record_id')->references('id')->on('vinyl_records');

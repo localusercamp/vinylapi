@@ -30,9 +30,10 @@ Route::prefix('admin')->group(function () {
   Route::put('author/{author}/restore', [AuthorController::class, 'restore'])->withTrashed();
 
   Route::prefix('vinyl-record')->controller(VinylRecordController::class)->group(function () {
-    Route::get('init',           'init');
-    Route::get('{vinyl_record}', 'get');
-    Route::post('',              'create');
+    Route::get('',                'list');
+    Route::get('init',            'init');
+    Route::get('{vinyl_record}',  'get');
+    Route::post('',               'create');
     Route::match(['put', 'post'], '{vinyl_record}', 'update');
   });
   // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);

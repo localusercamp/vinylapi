@@ -29,6 +29,15 @@ class VinylRecordController extends Controller
 
 
 
+  public function list(Request $request)
+  {
+    return VinylRecord::query()
+      ->with('poster', 'authors', 'country:id,name')
+      ->get()
+      ->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
+  }
+
+
   public function init()
   {
     $author_list = Author::query()->get(['id', 'name']);
@@ -93,7 +102,9 @@ class VinylRecordController extends Controller
     if ($step === 'main') {
       $vinyl_record->fill(Arr::except($input, 'author_ids'));
       $vinyl_record->save();
-      $vinyl_record->authors()->sync($input['author_ids']);
+      $main_author = array_shift($input['author_ids']);
+      $vinyl_record->authors()->syncWithPivotValues($input['author_ids'], ['is_main' => false]);
+      $vinyl_record->authors()->syncWithPivotValues([$main_author], ['is_main' => true], false);
     } else if ($step === 'addition') {
       $vinyl_record->fill($input)->save();
     } else if ($step === 'media') {

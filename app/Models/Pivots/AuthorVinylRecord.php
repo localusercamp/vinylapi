@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class AuthorVinylRecord extends Pivot
 {
-  protected $guarded = [
+  public $timestamps = false;
+
+  protected $fillable = [
     'author_id',
     'vinyl_record_id',
+    'is_main',
   ];
 }
