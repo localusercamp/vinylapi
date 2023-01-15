@@ -8,8 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 use App\Models\VinylRecord;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\VinylRecord\CreateVinylRecordRequest;
-use App\Http\Requests\VinylRecord\UpdateVinylRecordRequest;
 use App\Http\Resources\VinylRecord\EditableResource as VinylRecordEditableResource;
 use App\Models\Author;
 use App\Models\Country;
@@ -29,12 +27,34 @@ class VinylRecordController extends Controller
 
 
 
+  public function listInit(Request $request)
+  {
+    $author_list = Author::query()->get(['id', 'name']);
+
+    return compact('author_list');
+  }
+
   public function list(Request $request)
   {
-    return VinylRecord::query()
+    $search = trim($request->input('q'));
+
+    $is_valid_search = strlen($search) >= 3;
+
+    $paginator = VinylRecord::query()
       ->with('poster', 'authors', 'country:id,name')
-      ->get()
-      ->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
+      ->when($is_valid_search, function ($query) use ($search) {
+        $query->whereFullText('title', "'$search*'", ['mode' => 'boolean']);
+        $query->orWhere('catalog_number', 'like', "%$search%");
+      })
+      ->whereHas('authors', function ($q) {
+      })
+      ->paginate();
+
+    foreach ($paginator->items() as $vinyl_record) {
+      $vinyl_record->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
+    }
+
+    return $paginator;
   }
 
 
@@ -101,6 +121,8 @@ class VinylRecordController extends Controller
 
     if ($step === 'main') {
       $vinyl_record->fill(Arr::except($input, 'author_ids'));
+      $vinyl_record->save();
+      $vinyl_record->setHex();
       $vinyl_record->save();
       $main_author = array_shift($input['author_ids']);
       $vinyl_record->authors()->syncWithPivotValues($input['author_ids'], ['is_main' => false]);

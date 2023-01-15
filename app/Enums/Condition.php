@@ -4,14 +4,15 @@ namespace App\Enums;
 
 use Illuminate\Support\Collection;
 
-enum Condition
+enum Condition: string
 {
-  case Mint;
-  case NearMint;
-  case Excellent;
-  case VeryGood;
-  case Good;
-  case Poor;
+  case Mint           = 'Mint';
+  case NearMint       = 'NearMint';
+  case NearMintMinus  = 'NearMintMinus';
+  case ExcellentPlus  = 'ExcellentPlus';
+  case Excellent      = 'Excellent';
+  case ExcellentMinus = 'ExcellentMinus';
+  case VeryGood       = 'VeryGood';
 
 
   public static function all(): Collection
@@ -28,10 +29,11 @@ enum Condition
     return match ($this) {
       self::Mint => 'MT',
       self::NearMint => 'NM',
+      self::NearMintMinus => 'NM-',
+      self::ExcellentPlus => 'EX+',
       self::Excellent => 'EX',
+      self::ExcellentMinus => 'EX-',
       self::VeryGood => 'VG',
-      self::Good => 'G',
-      self::Poor => 'P',
       default => ''
     };
   }

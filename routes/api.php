@@ -30,6 +30,7 @@ Route::prefix('admin')->group(function () {
   Route::put('author/{author}/restore', [AuthorController::class, 'restore'])->withTrashed();
 
   Route::prefix('vinyl-record')->controller(VinylRecordController::class)->group(function () {
+    Route::get('list-init',       'listInit');
     Route::get('',                'list');
     Route::get('init',            'init');
     Route::get('{vinyl_record}',  'get');

@@ -193,6 +193,7 @@ class CountrySeeder extends Seeder
       ['code' => "RW", 'name' => "Руанда"],
       ['code' => "RO", 'name' => "Румыния"],
       ['code' => "SV", 'name' => "Сальвадор"],
+      ['code' => "SU", 'name' => "СССР"],
       ['code' => "WS", 'name' => "Самоа"],
       ['code' => "SM", 'name' => "Сан-Марино"],
       ['code' => "ST", 'name' => "Сан-Томе и Принсипи"],

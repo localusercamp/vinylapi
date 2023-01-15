@@ -16,14 +16,14 @@ return new class extends Migration
   {
     Schema::create('vinyl_records', function (Blueprint $table) {
       $table->id();
-      $table->string('title', 128);
+      $table->string('title', 128)->fulltext();
       $table->integer('price');
       $table->longText('description')->nullable();
       $table->string('status')->default(VinylRecordStatus::Draft->name);
       $table->string('condition')->nullable();
       $table->string('sleeve_condition')->nullable();
       $table->integer('release_year')->nullable();
-      $table->string('catalog_number')->nullable();
+      $table->string('catalog_number')->fulltext()->nullable();
 
       $table->unsignedBigInteger('country_id')->nullable();
       $table->unsignedBigInteger('genre_id')->nullable();

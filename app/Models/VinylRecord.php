@@ -21,6 +21,7 @@ use App\Models\Pivots\{
   AuthorVinylRecord,
 };
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @method static VinylRecordQueryBuilder query()
@@ -90,6 +91,11 @@ class VinylRecord extends Model implements Sellable
     return $this->hasMany(Image::class, 'vinyl_record_id');
   }
 
+
+  public function setHex()
+  {
+    $this->hex = strtoupper(dechex($this->id));
+  }
 
 
   public function newCollection(array $models = []): VinylRecordCollection
