@@ -94,8 +94,15 @@ class VinylRecord extends Model implements Sellable
 
   public function setHex()
   {
-    $this->hex = strtoupper(dechex($this->id));
+    srand($this->id);
+    $chars = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $hex = '';
+    for ($i = 0; $i < 6; $i++) {
+      $hex .= $chars[rand(0, strlen($chars) - 1)];
+    }
+    $this->hex = $hex;
   }
+
 
 
   public function newCollection(array $models = []): VinylRecordCollection

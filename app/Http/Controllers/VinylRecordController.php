@@ -44,6 +44,7 @@ class VinylRecordController extends Controller
       ->with('poster', 'authors', 'country:id,name')
       ->when($is_valid_search, function ($query) use ($search) {
         $query->whereFullText('title', "'$search*'", ['mode' => 'boolean']);
+        $query->orWhereFullText('hex', "'$search*'", ['mode' => 'boolean']);
         $query->orWhere('catalog_number', 'like', "%$search%");
       })
       ->whereHas('authors', function ($q) {
