@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\VinylRecordController;
 use Illuminate\Http\Request;
@@ -39,5 +40,11 @@ Route::prefix('admin')->group(function () {
   });
   // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
   // Route::post('test', [ImageController::class, 'test']);
+});
+
+Route::prefix('client')->group(function () {
+  Route::get('home',      [ClientController::class, 'home']);
+  Route::get('catalogue', [ClientController::class, 'catalogue']);
+  Route::get('vinyl/{vinyl_record}', [ClientController::class, 'vinyl']);
 });
 // });
