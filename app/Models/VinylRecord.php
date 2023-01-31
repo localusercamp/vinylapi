@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
+  BelongsTo,
   BelongsToMany,
   HasMany,
   HasOne,
@@ -81,9 +82,14 @@ class VinylRecord extends Model implements Sellable
     return $this->belongsTo(Image::class);
   }
 
-  public function country()
+  public function country(): BelongsTo
   {
     return $this->belongsTo(Country::class);
+  }
+
+  public function genre(): BelongsTo
+  {
+    return $this->belongsTo(Genre::class);
   }
 
   public function gallery(): HasMany

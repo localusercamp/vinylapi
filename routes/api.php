@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\VinylRecordController;
@@ -44,7 +45,12 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('client')->group(function () {
   Route::get('home',      [ClientController::class, 'home']);
-  Route::get('catalogue', [ClientController::class, 'catalogue']);
+
+  Route::prefix('catalogue')->controller(CatalogueController::class)->group(function () {
+    Route::get('init', 'init');
+    Route::get('', 'index');
+  });
+
   Route::get('vinyl/{vinyl_record}', [ClientController::class, 'vinyl']);
 });
 // });
