@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-enum VinylRecordStatus
+enum VinylRecordStatus: string
 {
-  case Draft;
-  case Published;
-  case Hidden;
+  case Draft = 'Draft';
+  case Published = 'Published';
+  case NotForSale = 'NotForSale';
 }

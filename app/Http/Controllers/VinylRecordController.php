@@ -37,6 +37,7 @@ class VinylRecordController extends Controller
   public function list(Request $request)
   {
     $search = trim($request->input('q'));
+    $authors = $request->collect('authors');
 
     $is_valid_search = strlen($search) >= 3;
 
@@ -47,13 +48,16 @@ class VinylRecordController extends Controller
         $query->orWhereFullText('hex', "'$search*'", ['mode' => 'boolean']);
         $query->orWhere('catalog_number', 'like', "%$search%");
       })
-      ->whereHas('authors', function ($q) {
+      ->whereHas('authors', function ($q) use ($authors) {
+        if ($authors->isNotEmpty()) $q->whereKey($authors);
       })
       ->paginate();
 
     foreach ($paginator->items() as $vinyl_record) {
       $vinyl_record->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
     }
+
+    sleep(2);
 
     return $paginator;
   }
@@ -94,6 +98,19 @@ class VinylRecordController extends Controller
   public function delete(VinylRecord $vinyl_record): JsonResponse
   {
     $vinyl_record->delete();
+
+    return response()->json();
+  }
+
+
+  public function changeStatus(Request $request, VinylRecord $vinyl_record): JsonResponse
+  {
+    $status = $request->input('status');
+
+    if ($vinyl_record->status === VinylRecordStatus::Draft->name) abort(403);
+
+    $vinyl_record->status = VinylRecordStatus::tryFrom($status)->name;
+    $vinyl_record->save();
 
     return response()->json();
   }

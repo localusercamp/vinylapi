@@ -38,6 +38,7 @@ Route::prefix('admin')->group(function () {
     Route::get('{vinyl_record}',  'get');
     Route::post('',               'create');
     Route::match(['put', 'post'], '{vinyl_record}', 'update');
+    Route::put('{vinyl_record}/status', 'changeStatus');
   });
   // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
   // Route::post('test', [ImageController::class, 'test']);
