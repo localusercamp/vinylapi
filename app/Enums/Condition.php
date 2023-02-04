@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 
 enum Condition: string
 {
+  case StillSealed    = 'StillSealed';
   case Mint           = 'Mint';
   case NearMint       = 'NearMint';
   case NearMintMinus  = 'NearMintMinus';
@@ -27,6 +28,7 @@ enum Condition: string
   public function abbreviation(): string
   {
     return match ($this) {
+      self::StillSealed => 'SS',
       self::Mint => 'MT',
       self::NearMint => 'NM',
       self::NearMintMinus => 'NM-',

@@ -11,6 +11,7 @@ use App\Models\Author;
 use App\Models\Country;
 use App\Models\Genre;
 use App\Models\VinylRecord;
+use Illuminate\Pagination\Paginator;
 
 class CatalogueController extends Controller
 {
@@ -79,6 +80,6 @@ class CatalogueController extends Controller
         'date-desc'  => $query->orderBy('created_at', 'desc'),
         default => $query
       })
-      ->paginate(10);
+      ->paginate(1);
   }
 }

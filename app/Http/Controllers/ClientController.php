@@ -26,6 +26,8 @@ class ClientController extends Controller
 
   public function vinyl(VinylRecord $vinyl_record)
   {
-    return $vinyl_record->load(['poster', 'gallery', 'authors', 'genre', 'country']);
+    return $vinyl_record
+      ->load(['poster', 'gallery', 'authors', 'genre', 'country'])
+      ->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
   }
 }
