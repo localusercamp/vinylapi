@@ -57,8 +57,6 @@ class VinylRecordController extends Controller
       $vinyl_record->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
     }
 
-    sleep(2);
-
     return $paginator;
   }
 
@@ -124,7 +122,7 @@ class VinylRecordController extends Controller
     if (!in_array($step, $this->steps)) abort(404);
 
     $input = $request->only(match ($step) {
-      'main'     => ['title', 'description', 'price', 'author_ids'],
+      'main'     => ['title', 'description', 'price', 'author_ids', 'is_price_offer'],
       'addition' => ['condition', 'sleeve_condition', 'release_year', 'country_id', 'genre_id', 'catalog_number'],
       'media'    => ['poster', 'gallery', 'publish', 'delete_gallery']
     });
@@ -138,6 +136,7 @@ class VinylRecordController extends Controller
     if ($errors->isNotEmpty()) response()->json(compact('errors'), 422)->throwResponse();
 
     if ($step === 'main') {
+      if ($input['is_price_offer']) unset($input['price']);
       $vinyl_record->fill(Arr::except($input, 'author_ids'));
       $vinyl_record->save();
       $vinyl_record->setHex();
@@ -192,8 +191,9 @@ class VinylRecordController extends Controller
     return validator($input, [
       'title'       => 'required|string',
       'description' => 'nullable|string',
-      'price'       => 'required|integer|min:0',
+      'price'       => 'required_if:is_price_offer,false',
       'author_ids'  => 'required|array',
+      'is_price_offer' => 'required|boolean',
     ]);
   }
 

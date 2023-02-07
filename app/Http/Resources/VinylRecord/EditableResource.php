@@ -20,6 +20,7 @@ class EditableResource extends JsonResource
       'sleeve_condition' => $this->sleeve_condition,
       'release_year' => $this->release_year,
       'catalog_number' => $this->catalog_number,
+      'is_price_offer' => $this->is_price_offer,
 
       'poster' => $this->poster,
       'gallery' => $this->gallery,
