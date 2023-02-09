@@ -80,6 +80,6 @@ class CatalogueController extends Controller
         'date-desc'  => $query->orderBy('created_at', 'desc'),
         default => $query
       })
-      ->paginate(10);
+      ->paginate(12);
   }
 }
