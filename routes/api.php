@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\ClientController;
@@ -20,14 +21,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 |
 */
 
-// Route::middleware('auth:sanctum')->group(function () {
-
-Route::prefix('admin-panel')->group(function () {
-  // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
-  // Route::post('test', [ImageController::class, 'test']);
-});
-
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
   Route::apiResource('author', AuthorController::class)->only(['index', 'store', 'update', 'destroy']);
   Route::put('author/{author}/restore', [AuthorController::class, 'restore'])->withTrashed();
 
@@ -40,8 +34,11 @@ Route::prefix('admin')->group(function () {
     Route::match(['put', 'post'], '{vinyl_record}', 'update');
     Route::put('{vinyl_record}/status', 'changeStatus');
   });
-  // Route::post('upload-vinyl-cover', [ImageController::class, 'uploadVinylRecordCover']);
-  // Route::post('test', [ImageController::class, 'test']);
+});
+
+Route::prefix('auth')->group(function () {
+  Route::post('login', [AuthController::class, 'login']);
+  Route::post('me',    [AuthController::class, 'me'])->middleware('auth:sanctum');
 });
 
 Route::prefix('client')->group(function () {
@@ -54,4 +51,3 @@ Route::prefix('client')->group(function () {
 
   Route::get('vinyl/{vinyl_record}', [ClientController::class, 'vinyl']);
 });
-// });
