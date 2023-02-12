@@ -28,6 +28,12 @@ class AuthController extends Controller
   }
 
 
+  public function logout(Request $request)
+  {
+    return Auth::logout();
+  }
+
+
 
   public function me(Request $request)
   {
