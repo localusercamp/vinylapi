@@ -18,13 +18,13 @@ class UserSeeder extends Seeder
   {
     $admin = new User();
     $admin->login = 'admin';
-    $admin->password = bcrypt('password');
+    $admin->password = bcrypt('8L#2FhOapI');
     $admin->role = Role::Admin->name;
     $admin->save();
 
     $admin = new User();
     $admin->login = 'murad';
-    $admin->password = bcrypt('password');
+    $admin->password = bcrypt('IlN}@rqW?m');
     $admin->role = Role::Admin->name;
     $admin->save();
   }
