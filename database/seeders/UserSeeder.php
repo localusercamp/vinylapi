@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    DB::table('user')->truncate();
+    DB::table('users')->truncate();
 
     $admin = new User();
     $admin->login = 'admin';
