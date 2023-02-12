@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -16,6 +17,8 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
+    DB::table('user')->truncate();
+
     $admin = new User();
     $admin->login = 'admin';
     $admin->password = bcrypt('8L#2FhOapI');
