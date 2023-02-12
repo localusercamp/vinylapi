@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
 
     $admin = new User();
     $admin->login = 'murad';
-    $admin->password = bcrypt('IlN}@rqW?m');
+    $admin->password = bcrypt('Jfjchagfgf@4');
     $admin->role = Role::Admin->name;
     $admin->save();
   }
