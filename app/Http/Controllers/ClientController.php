@@ -16,9 +16,8 @@ class ClientController extends Controller
       ->with(['poster', 'authors'])
       ->where('status', VinylRecordStatus::Published->name)
       ->orderBy('created_at')
+      ->take(8)
       ->get();
-
-    $new = $new->concat($new)->take(8);
 
     return compact('new');
   }
