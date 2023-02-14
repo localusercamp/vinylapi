@@ -30,7 +30,7 @@ class AuthController extends Controller
 
   public function logout(Request $request)
   {
-    return Auth::logout();
+    return Auth::guard('web')->logout();
   }
 
 
@@ -38,5 +38,10 @@ class AuthController extends Controller
   public function me(Request $request)
   {
     return auth()->user();
+  }
+
+  public function unauthorized(Request $request)
+  {
+    abort(401, 'Unauthorized.');
   }
 }
