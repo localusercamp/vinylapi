@@ -51,7 +51,8 @@ class VinylRecordController extends Controller
       ->whereHas('authors', function ($q) use ($authors) {
         if ($authors->isNotEmpty()) $q->whereKey($authors);
       })
-      ->paginate();
+      ->orderByDesc('created_at')
+      ->paginate(12);
 
     foreach ($paginator->items() as $vinyl_record) {
       $vinyl_record->append(['condition_abbreviation', 'sleeve_condition_abbreviation']);
