@@ -38,6 +38,7 @@ class VinylRecordController extends Controller
   {
     $search = trim($request->input('q'));
     $authors = $request->collect('authors');
+    $show_sold = $request->boolean('show_sold');
 
     $is_valid_search = strlen($search) >= 3;
 
@@ -50,6 +51,9 @@ class VinylRecordController extends Controller
       })
       ->whereHas('authors', function ($q) use ($authors) {
         if ($authors->isNotEmpty()) $q->whereKey($authors);
+      })
+      ->when(!$show_sold, function ($query) {
+        $query->where('status', '!=', VinylRecordStatus::Sold->name);
       })
       ->orderByDesc('created_at')
       ->paginate(12);
