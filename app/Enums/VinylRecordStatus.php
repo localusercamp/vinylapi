@@ -7,4 +7,5 @@ enum VinylRecordStatus: string
   case Draft = 'Draft';
   case Published = 'Published';
   case NotForSale = 'NotForSale';
+  case Sold = 'Sold';
 }

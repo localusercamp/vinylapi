@@ -15,7 +15,7 @@ class ClientController extends Controller
     $new = VinylRecord::query()
       ->with(['poster', 'authors'])
       ->where('status', VinylRecordStatus::Published->name)
-      ->orderBy('created_at')
+      ->orderByDesc('created_at')
       ->take(8)
       ->get();
 
