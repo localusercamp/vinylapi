@@ -166,8 +166,10 @@ class VinylRecordController extends Controller
       }
 
       if ($uploadedPoster) {
-        $path = $uploadedPoster->storePublicly('public/vinyl-record/posters');
+        $path = $uploadedPoster->storePublicly(Image::VINYL_RECORD_POSTERS_DIR);
+
         $poster = Image::create(compact('path'));
+        $poster->makeXsVersion()->save();
         $vinyl_record->poster_id = $poster->id;
       }
 
@@ -177,7 +179,7 @@ class VinylRecordController extends Controller
       }
 
       foreach ($uploadedGallery as $uploadedImage) {
-        $path = $uploadedImage->storePublicly('public/vinyl-record/galleries/' . $vinyl_record->id);
+        $path = $uploadedImage->storePublicly(Image::VINYL_RECORD_GALLERIES_DIR . '/' . $vinyl_record->id);
         $vinyl_record->gallery()->create(compact('path'));
       }
 
@@ -217,7 +219,7 @@ class VinylRecordController extends Controller
   protected function validateMediaStep(array $input): Validator
   {
     return validator($input, [
-      'poster' => 'sometimes',
+      'poster' => 'sometimes|file|mimes:jpg,jpeg,png',
       'gallery' => 'sometimes|array',
       'publish' => 'required|bool',
       'delete_gallery' => 'sometimes|array'
