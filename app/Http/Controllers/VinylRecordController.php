@@ -141,7 +141,6 @@ class VinylRecordController extends Controller
     if ($errors->isNotEmpty()) response()->json(compact('errors'), 422)->throwResponse();
 
     if ($step === 'main') {
-      if ($input['is_price_offer']) unset($input['price']);
       $vinyl_record->fill(Arr::except($input, 'author_ids'));
       $vinyl_record->save();
       $vinyl_record->setHex();
@@ -198,7 +197,7 @@ class VinylRecordController extends Controller
     return validator($input, [
       'title'       => 'required|string',
       'description' => 'nullable|string',
-      'price'       => 'required_if:is_price_offer,false',
+      'price'       => 'required|integer',
       'author_ids'  => 'required|array',
       'is_price_offer' => 'required|boolean',
     ]);
