@@ -27,10 +27,6 @@ class CatalogueController extends Controller
 
   public function index(Request $request)
   {
-    // header('Access-Control-Allow-Origin: *');
-    // header('Access-Control-Allow-Methods: *');
-    // header('Access-Control-Allow-Headers: *');
-
     $input = $request->only(['q', 'author', 'genre', 'condition', 'country', 'yearMin', 'yearMax']);
 
     $errors = validator($input, [
@@ -56,30 +52,47 @@ class CatalogueController extends Controller
     $priceMin  = $request->input('priceMin');
     $priceMax  = $request->input('priceMax');
 
-    return VinylRecord::query()
+    $query = VinylRecord::query()
       ->with(['poster', 'authors'])
-      ->where('status', VinylRecordStatus::Published->name)
-      ->when($q, fn ($query) => $query
-        ->whereFullText('title', "'$q*'", ['mode' => 'boolean'])
-        ->orWhere('catalog_number', 'like', "%$q%"))
-      ->when($author->isNotEmpty(), fn ($query) => $query
-        ->whereHas('authors', fn ($query) => $query
-          ->whereKey($author)))
-      ->when($genre->isNotEmpty(), fn ($query) => $query
-        ->whereIn('genre_id', $genre))
-      ->when($condition->isNotEmpty(), fn ($query) => $query
-        ->whereIn('condition', $condition))
-      ->when(!is_null($priceMin), fn ($query) => $query
-        ->where('price', '>=', intval($priceMin)))
-      ->when(!is_null($priceMax), fn ($query) => $query
-        ->where('price', '<=', intval($priceMax)))
-      ->when($sort, fn ($query) => match ($sort) {
-        'price-asc'  => $query->orderBy('price', 'asc'),
-        'price-desc' => $query->orderBy('price', 'desc'),
-        'date-asc'   => $query->orderBy('created_at', 'asc'),
-        'date-desc'  => $query->orderBy('created_at', 'desc'),
-        default => $query
-      })
-      ->paginate(12);
+      ->where('status', VinylRecordStatus::Published->name);
+
+    if ($q) {
+      $query->where(function ($query) {
+        $query->whereFullText('title', "'$q*'", ['mode' => 'boolean'])->orWhere('catalog_number', 'like', "%$q%");
+      });
+    }
+
+    if ($author->isNotEmpty()) {
+      $query->whereHas('authors', fn ($query) => $query->whereKey($author));
+    }
+
+    if ($genre->isNotEmpty()) {
+      $query->whereIn('genre_id', $genre);
+    }
+
+    if ($condition->isNotEmpty()) {
+      $query->whereIn('condition', $condition);
+    }
+
+    if (!is_null($priceMin)) {
+      $query->where('price', '>=', intval($priceMin));
+    }
+
+    if (!is_null($priceMax)) {
+      $query->where('price', '<=', intval($priceMax));
+    }
+
+    if ($sort) {
+      $sorts = collect([
+        'price-asc'  => fn () => $query->orderBy('price', 'asc'),
+        'price-desc' => fn () => $query->orderBy('price', 'desc'),
+        'date-asc'   => fn () => $query->orderBy('created_at', 'asc'),
+        'date-desc'  => fn () => $query->orderBy('created_at', 'desc'),
+      ]);
+
+      if ($sorts->keys()->contains($sort)) ($sorts->get($sort))();
+    }
+
+    return $query->paginate(12)->onEachSide(1);
   }
 }
