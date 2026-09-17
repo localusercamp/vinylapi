@@ -58,7 +58,7 @@ class CatalogueController extends Controller
 
     if ($q) {
       $query->where(function ($query) {
-        $query->whereFullText('title', "'$q*'", ['mode' => 'boolean'])->orWhere('catalog_number', 'like', "%$q%");
+        $query->where('title', 'like', "%$q%")->orWhere('catalog_number', 'like', "%$q%");
       });
     }
 
